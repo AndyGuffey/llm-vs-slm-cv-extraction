@@ -30,6 +30,13 @@ def test_connection():
     )
     print(response.text)
 
+def run_model():
+    # Call one model, return (parsed json, latency in seconds, raw response text)
+    pass
+
+def score():
+    # Compare the model's output to the ground truth and return a score
+    pass
 
 if __name__ == "__main__":
     test_connection()
