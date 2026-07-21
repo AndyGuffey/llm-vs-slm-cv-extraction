@@ -24,23 +24,99 @@ Key concept: everything is identical except the model. same CV, same prompt, sam
 Aiming to focus mainly on model size
 
 ---------------------------------------------------------------
-STEP 1: TEST INPUT (fake CV)
+STEP 1: TEST INPUT (data/sample_cv.txt)
+---------------------------------------------------------------
+LOAD sample_cv = read data/sample_cv.txt
+
+    Real CV (my own), containing 3 jobs, each written in a
+    DIFFERENT date format:
+
+        Job 1: "Oct 2025 - Present"           <- clean dates
+        Job 2: "Nov 2022 to Mar 2025"         <- "to" instead of "-"
+        Job 3: "Summer 2021/22 (Sep-Feb)"     <- ambiguous, spans
+                                                 two years
+
+    WHY: real CVs are messy and inconsistent. If both models
+    only saw clean input, we would learn nothing about which
+    one handles the hard cases. Job 3 is a deliberate "trap"
+    likely to separate the models.
+
+    NOTE: this went with a real (my own) CV rather than a
+    fictional one -- there is no third-party privacy concern
+    since it's my own data, and it keeps the test grounded in
+    an actual messy document rather than an invented one.
+
+    ALSO LOAD ground_truth = data/ground_truth.json
+        -> the correct {title, company, start, end, description}
+           for each of the 3 jobs above, used later for scoring
+
+---------------------------------------------------------------
+STEP 2: THE GROUND TRUTH (data/ground_truth.json, the answer key)
+---------------------------------------------------------------
+LOAD ground_truth = read data/ground_truth.json
+        -> JSON array of 3 records, one per job, matching the
+           prompt's schema exactly:
+           { title, company, start, end, description }
+
+        e.g. { "title": "Full Stack Developer",
+               "company": "Riverhorse Consulting Limited",
+               "start": "2025-10", "end": "present",
+               "description": "..." }
+
+    WHY: to measure accuracy you must know, in advance, what a
+    perfect answer looks like. Because it's MY OWN CV, I know
+    exactly what should be extracted -- dates normalized to
+    YYYY-MM so they can be compared to the model's output with
+    exact string matching. The ground truth is the marking
+    rubric the models are scored against.
+
+    NOTE on "description": scored as presence/non-empty only,
+    NOT exact-match -- free text will legitimately differ in
+    wording between the two models, so exact-matching it would
+    penalise correct answers for phrasing rather than accuracy.
+
+---------------------------------------------------------------
+STEP 3: PROMPT (data/prompt.md, the task instruction)
+---------------------------------------------------------------
+LOAD prompt_template = read data/prompt.md
+SET prompt = prompt_template with {SAMPLE_CV} replaced by sample_cv
+
+    Instruction given to BOTH models, identical every time:
+
+        "Extract the work experience from this CV into JSON.
+         Respond with ONLY a JSON array, no markdown fences,
+         no commentary. Each entry must have exactly these keys:
+         title, company, start (YYYY-MM), end (YYYY-MM or
+         "present"), description (one sentence)."
+
+    JSON-only, no markdown fences: model replies need
+    to be parsed straight into structured data (Step 3/4). Any
+    extra commentary or ```json fences would need to be stripped
+    before parsing, and asking for exactly one schema up front
+    means both models are held to the same bar.
+
+---------------------------------------------------------------
+STEP 4: CALLING A MODEL (the run_model function)
+---------------------------------------------------------------
+    NOT YET IMPLEMENTED -- run_model() is currently a stub (pass)
+    in cv_extraction.py. Planned logic:
+
+    - API call: sends text to a model running on
+      Google's servers and gets text back.
+    - Latency: measured around the API call only, because that
+      is the delay a user would actually feel while waiting for
+      their extraction to complete.
+    - Parsing: models return TEXT. "JSON-shaped text" only
+      becomes usable data after parsing. Small models fail this
+      step more often -- which is exactly the kind of
+      reliability difference the experiment exists to surface.
+    - Defensive error handling: never assume the model obeyed.
+---------------------------------------------------------------
+STEP 5: SCORING (the score function)
 ---------------------------------------------------------------
 
 ---------------------------------------------------------------
-STEP 2: PROMPT (the task instruction)
----------------------------------------------------------------
-
----------------------------------------------------------------
-STEP 3: CALLING A MODEL (the run_model function)
----------------------------------------------------------------
-
----------------------------------------------------------------
-STEP 4: SCORING (the score function)
----------------------------------------------------------------
-
----------------------------------------------------------------
-STEP 5: THE MAIN LOOP (running the comparison)
+STEP 6: THE MAIN LOOP (running the comparison)
 ---------------------------------------------------------------
 
 ---------------------------------------------------------------
