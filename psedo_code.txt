@@ -1,0 +1,63 @@
+PSEUDOCODE WALKTHROUGH -- CV Extraction LLM vs SLM
+==================================================
+
+This file covers the logic of the test in pseudocode & the logic of what the python script does
+
+The test aims to answer one question:
+On the same CV extraction task, how does a small model compare to a large model on ACCURACY, LATENCY & COST
+
+---------------------------------------------------------------
+HIGH LEVEL PICTURE
+---------------------------------------------------------------
+
+DEFINE a test CV                (the input)
+DEFINE the correct answers      (the "ground truth")
+DEFINE one extraction prompt    (the task, identical for both)
+
+    FOR each model [SLM, LLM]:
+        send prompt to model
+        time how long it takes to parse model's reply into structured data
+        score the reply againts the ground truth
+        print accuracy, latency, and any mistakes
+
+Key concept: everything is identical except the model. same CV, same prompt, same scoring.
+Aiming to focus mainly on model size
+
+---------------------------------------------------------------
+STEP 1: TEST INPUT (fake CV)
+---------------------------------------------------------------
+
+---------------------------------------------------------------
+STEP 2: PROMPT (the task instruction)
+---------------------------------------------------------------
+
+---------------------------------------------------------------
+STEP 3: CALLING A MODEL (the run_model function)
+---------------------------------------------------------------
+
+---------------------------------------------------------------
+STEP 4: SCORING (the score function)
+---------------------------------------------------------------
+
+---------------------------------------------------------------
+STEP 5: THE MAIN LOOP (running the comparison)
+---------------------------------------------------------------
+
+---------------------------------------------------------------
+WHAT THE RESULTS MEAN FOR THE ASSIGNMENT
+---------------------------------------------------------------
+
+IF small model accuracy -= large model accuracy:
+        -> evidence FOR the SLM recommendation:
+           good enough at a fraction of cost and latency
+ 
+    IF small model fails on the messy dates or breaks JSON:
+        -> evidence for a HYBRID design:
+           SLM by default, escalate to LLM when the SLM's
+           output fails validation or looks low confidence
+ 
+    EITHER WAY:
+        latency difference -> user experience argument
+        price-per-token difference -> cost-at-scale argument
+        (1 CV here; a production decision would test a large amount
+         -- limitation)
