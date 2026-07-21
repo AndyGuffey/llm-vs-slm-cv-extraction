@@ -30,12 +30,40 @@ def test_connection():
     )
     print(response.text)
 
-def run_model():
-    # Call one model, return (parsed json, latency in seconds, raw response text)
-    pass
+def run_model(model_id: str):
+    #? Call one model, return (parsed json, latency in seconds, raw response text)
+
+    # perf_counter is monotonic, so it isn't skewed by system clock
+    # adjustments -- start/stop bracket only the API call itself.
+    start = time.perf_counter()
+    response = client.models.generate_content(
+        model=MODELS[model_id],
+        contents=PROMPT,
+    )
+    latency = time.perf_counter() - start
+
+    raw = response.text.strip()
+
+    # Despite the prompt asking for no markdown fences, models
+    # sometimes wrap the JSON in ```json ... ``` anyway. Strip it
+    # so json.loads doesn't fail on otherwise-valid output.
+    cleaned = raw.replace("```json", "").replace("```", "").strip()
+
+    # Never assume the model obeyed the schema -- the SLM in
+    # particular may return malformed JSON. A failed parse is
+    # itself a result worth recording, not a crash.
+    try:
+        parsed = json.loads(cleaned)
+    except json.JSONDecodeError:
+        parsed = None
+
+    # raw is returned alongside parsed so a failed parse can still
+    # be inspected/debugged instead of being silently discarded.
+    return parsed, latency, raw
+    
 
 def score():
-    # Compare the model's output to the ground truth and return a score
+    #? Compare the model's output to the ground truth and return a score
     pass
 
 if __name__ == "__main__":
