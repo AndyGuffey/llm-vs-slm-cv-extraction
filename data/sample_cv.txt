@@ -1,0 +1,23 @@
+ANDY GUFFEY
+Auckland, New Zealand | andrewgu@missionreadyhq.com
+ 
+PROFILE
+Full Stack Developer | Currently studying a Postgraduate Diploma in AI Product Engineering.
+ 
+WORK HISTORY
+ 
+Full Stack Developer -- Riverhorse Consulting Limited, Remote
+Oct 2025  - Present
+Architectural transition from a legacy Bubble.io environment to a custom full-stack Next.js application.
+ 
+Operator - Proccessing | Fonterra (Whakatane)
+Nov 2022 to Mar 2025
+production processes using automated systems, Coordinated key manufacturing processes, quality checks.
+ 
+Business Process Coordinator , MFAT - Wellington
+Summer 2021/22 (Sep-Feb)
+Summer role: front-end HTML coding, process design, workflow enhancements.
+ 
+EDUCATION
+Advanced Full Stack Developer Diploma, Mission Ready, 2025
+"""
