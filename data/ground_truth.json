@@ -3,18 +3,21 @@
     "title": "Full Stack Developer",
     "company": "Riverhorse Consulting Limited",
     "start": "2025-10",
-    "end": "present"
+    "end": "present",
+    "description": "Architectural transition from a legacy Bubble.io environment to a custom full-stack Next.js application."
   },
   {
     "title": "Operator - Processing",
     "company": "Fonterra",
     "start": "2022-11",
-    "end": "2025-03"
+    "end": "2025-03",
+    "description": "Coordinated key manufacturing and production processes using automated systems, including quality checks."
   },
   {
     "title": "Business Process Coordinator",
     "company": "MFAT",
     "start": "2021-09",
-    "end": "2022-02"
+    "end": "2022-02",
+    "description": "Summer role covering front-end HTML coding, process design, and workflow enhancements."
   }
 ]
