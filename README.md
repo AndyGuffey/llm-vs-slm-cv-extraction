@@ -54,3 +54,37 @@ The only models that actually respond on this key's free tier are `gemini-flash-
 **This means the current comparison is Flash-Lite vs Flash, not Flash-Lite vs Pro.** Both models are in the same family, so the size gap under test is smaller than originally designed -- any accuracy difference observed likely *understates* what a true SLM-vs-LLM gap would look like. This is a limitation to call out explicitly in the write-up, not a result to present as a fair small-vs-large comparison.
 
 To run the intended Pro-scale comparison, billing needs to be enabled on the Google AI Studio project to unlock `gemini-pro-latest` quota, then `MODELS["LLM-class"]` in `cv_extraction.py` swapped back to it.
+
+## Results
+
+5 runs of `python cv_extraction.py`, captured as terminal screenshots:
+
+| Run | SLM-class (Flash-Lite) latency | SLM accuracy | LLM-class (Flash) latency | LLM accuracy |
+|---|---|---|---|---|
+| 1 | 1.51s | 14/15 (93%) | 9.96s | 14/15 (93%) |
+| 2 | 1.40s | 14/15 (93%) | 5.86s | 14/15 (93%) |
+| 3 | 1.63s | 15/15 (100%) | 6.16s | 14/15 (93%) |
+| 4 | 1.34s | 14/15 (93%) | 8.10s | 15/15 (100%) |
+| 5 | 1.54s | 15/15 (100%) | 5.05s | 15/15 (100%) |
+
+Across all 5 runs, Flash-Lite was consistently 3-7x faster (~1.3-1.6s vs ~5-10s) while accuracy was comparable between the two. The one recurring "miss" is both models occasionally transcribing "Operator - Proccessing" verbatim from a typo in the source CV, which the ground truth has corrected to "Processing" -- arguably a ground-truth artifact rather than a genuine extraction error.
+
+<details>
+<summary>Raw terminal output (click to expand)</summary>
+
+**Run 1**
+![Run 1](test_results/1.png)
+
+**Run 2**
+![Run 2](test_results/2.png)
+
+**Run 3**
+![Run 3](test_results/3.png)
+
+**Run 4**
+![Run 4](test_results/4.png)
+
+**Run 5**
+![Run 5](test_results/5.png)
+
+</details>
