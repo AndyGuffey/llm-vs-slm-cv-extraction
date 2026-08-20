@@ -8,8 +8,11 @@ from dotenv import load_dotenv
 from google import genai
 
 ROOT_DIR = Path(__file__).parent.parent
-DATA_DIR = ROOT_DIR / "data"
-PROMPT_TEMPLATE = (DATA_DIR / "prompt.md").read_text(encoding="utf-8")
+BACKEND_DIR = Path(__file__).parent
+
+# Forked from data/prompt.md -- the demo prompt is tuned independently so it
+# doesn't affect the eval experiment's already-recorded results.
+PROMPT_TEMPLATE = (BACKEND_DIR / "prompt.md").read_text(encoding="utf-8")
 
 load_dotenv(ROOT_DIR / ".env")
 
