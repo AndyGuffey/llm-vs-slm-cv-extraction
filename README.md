@@ -33,9 +33,34 @@ cv_extraction.py       -- run_model(), score(), main()
 data/
   sample_cv.txt         -- test input: a real CV with 3 jobs, each in a different date format
   ground_truth.json     -- the correct extraction, used for scoring
-  prompt.md              -- the extraction prompt sent to both models
+  prompt.md              -- the extraction prompt sent to both models (shared with backend/)
 pseudo_code.md          -- pseudocode walkthrough of the test logic
+backend/                 -- demo app API (FastAPI + local Llama via Ollama)
+frontend/                -- demo app UI (React + Vite)
 ```
+
+## Demo app
+
+Upload a CV (PDF/DOCX) and auto-fill its experience section, with a per-role confidence score. Uses a local Llama model via [Ollama](https://ollama.com) instead of the Gemini API, so the demo doesn't depend on a cloud key.
+
+**Backend**
+```bash
+ollama pull llama3.2:3b   # once, requires Ollama installed and running
+cd backend
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
+
+**Frontend** (separate terminal)
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Then open the Vite dev server URL (typically `http://localhost:5173`).
 
 ## Caveats: model size access
 

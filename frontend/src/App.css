@@ -1,0 +1,87 @@
+.app {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  text-align: left;
+}
+
+.subtitle {
+  color: var(--text-muted, #888);
+  margin-bottom: 24px;
+}
+
+.upload-form {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.error {
+  color: #d33;
+}
+
+.latency {
+  color: var(--text-muted, #888);
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.experience-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.role {
+  border: 1px solid var(--border, #333);
+  border-left: 4px solid var(--border, #333);
+  border-radius: 6px;
+  padding: 12px 16px;
+}
+
+.role--high {
+  border-left-color: #2a9d5c;
+}
+
+.role--medium {
+  border-left-color: #d4a017;
+}
+
+.role--low {
+  border-left-color: #d33;
+}
+
+.role-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.role-title {
+  font-weight: 600;
+}
+
+.confidence-badge {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--accent-bg, #eee);
+  color: var(--accent, #333);
+}
+
+.role-company {
+  font-size: 14px;
+  color: var(--text-muted, #888);
+}
+
+.role-dates {
+  font-size: 13px;
+  color: var(--text-muted, #888);
+  margin-bottom: 6px;
+}
+
+.role-description {
+  margin: 0;
+  font-size: 14px;
+}
