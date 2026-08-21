@@ -6,15 +6,21 @@ The extraction model is swappable via the `MODEL_BACKEND` env var, with automati
 
 | `MODEL_BACKEND` | Model | Notes |
 |---|---|---|
-| `gemini` (default) | Gemini API | cloud-hosted |
-| `ollama` | `llama3.2:3b`, local | simulates a company running its own locally-hosted SLM, no cloud key needed; low-confidence extractions escalate to Gemini |
+| `ollama` (default) | `llama3.2:3b`, local | simulates a company running its own locally-hosted SLM, no cloud key needed; low-confidence extractions escalate to Gemini |
+| `gemini` | Gemini API | cloud-hosted, skips local inference entirely |
 
 ## Setup
 
-Copy `.env.example` to `.env` in the repo root and add a Gemini API key:
+Copy `.env.example` to `.env` in the repo root and add a Gemini API key (used both directly when `MODEL_BACKEND=gemini`, and as the escalation model when running on Ollama):
 
 ```
 GEMINI_API_KEY=your_key_here
+```
+
+The default backend is Ollama, so also install it and pull the model:
+```bash
+ollama pull llama3.2:3b   # once -- requires Ollama installed (https://ollama.com)
+ollama serve              # if it isn't already running in the background
 ```
 
 **Backend**
@@ -26,11 +32,9 @@ pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
-To use the local Ollama model instead of Gemini:
+To skip local inference and use Gemini directly instead:
 ```bash
-ollama pull llama3.2:3b   # once -- requires Ollama installed (https://ollama.com)
-ollama serve              # if it isn't already running in the background
-MODEL_BACKEND=ollama uvicorn main:app --reload
+MODEL_BACKEND=gemini uvicorn main:app --reload
 ```
 
 **Frontend** (separate terminal)

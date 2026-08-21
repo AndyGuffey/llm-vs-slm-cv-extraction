@@ -21,9 +21,10 @@ INSTRUCTIONS = PROMPT_TEMPLATE.split("\n\nCV:\n")[0]
 
 load_dotenv(ROOT_DIR / ".env")
 
-# Which backend run_model() calls -- "gemini" while Ollama isn't set up
-# locally, switch to "ollama" once it is. Same prompt/parsing either way.
-MODEL_BACKEND = os.environ.get("MODEL_BACKEND", "gemini")
+# Which backend run_model() calls -- defaults to the local Ollama model,
+# escalating to Gemini on low confidence (see should_escalate). Override
+# with MODEL_BACKEND=gemini to skip local inference entirely.
+MODEL_BACKEND = os.environ.get("MODEL_BACKEND", "ollama")
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
 OLLAMA_MODEL_ID = "llama3.2:3b"
