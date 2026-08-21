@@ -1,53 +1,21 @@
-# LLM vs SLM: CV Extraction
+# CV Extraction Demo
 
-A small experiment comparing a large language model against a small language model on the same CV-extraction task, measuring **accuracy**, **latency**, and **cost**.
+Upload a CV (PDF/DOCX), auto-fill its experience section, and see a per-role confidence score. FastAPI backend + React (Vite) frontend.
 
-Both models are given the identical prompt and CV, and are scored against the same hand-written ground truth. See [`pseudo_code.md`](pseudo_code.md) for the full step-by-step logic walkthrough.
+The extraction model is swappable via the `MODEL_BACKEND` env var, with automatic escalation to Gemini when the primary model's confidence is low:
+
+| `MODEL_BACKEND` | Model | Notes |
+|---|---|---|
+| `gemini` (default) | Gemini API | cloud-hosted |
+| `ollama` | `llama3.2:3b`, local | simulates a company running its own locally-hosted SLM, no cloud key needed; low-confidence extractions escalate to Gemini |
 
 ## Setup
 
-```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-```
-
-Copy `.env.example` to `.env` and add a Gemini API key:
+Copy `.env.example` to `.env` in the repo root and add a Gemini API key:
 
 ```
 GEMINI_API_KEY=your_key_here
 ```
-
-## Running
-
-```bash
-python cv_extraction.py
-```
-
-This runs both models against `data/sample_cv.txt`, scores each reply against `data/ground_truth.json`, and prints latency, accuracy, and any mismatches for each.
-
-## Project structure
-
-```
-cv_extraction.py       -- run_model(), score(), main()
-data/
-  sample_cv.txt         -- test input: a real CV with 3 jobs, each in a different date format
-  ground_truth.json     -- the correct extraction, used for scoring
-  prompt.md              -- the extraction prompt sent to both models (frozen -- matches recorded results below)
-pseudo_code.md          -- pseudocode walkthrough of the test logic
-backend/                 -- demo app API (FastAPI, Gemini or local Ollama backend)
-  prompt.md               -- demo's own extraction prompt (tuned independently, e.g. full descriptions)
-frontend/                -- demo app UI (React + Vite)
-```
-
-## Demo app
-
-Upload a CV (PDF/DOCX) and auto-fill its experience section, with a per-role confidence score. The extraction backend is swappable via the `MODEL_BACKEND` env var:
-
-| `MODEL_BACKEND` | Model | Notes |
-|---|---|---|
-| `gemini` (default) | Gemini API | uses the same `GEMINI_API_KEY` as the root eval script |
-| `ollama` | `llama3.2:3b`, local | simulates a company running its own locally-hosted SLM, no cloud key needed |
 
 **Backend**
 ```bash
@@ -74,54 +42,16 @@ npm run dev
 
 Then open the Vite dev server URL (typically `http://localhost:5173`).
 
-## Caveats: model size access
+## Project structure
 
-The original plan was to compare `gemini-2.5-flash-lite` (SLM) against `gemini-2.5-pro` (LLM). Neither could be used:
+```
+backend/                 -- FastAPI app (extraction, file parsing, per-extraction logging)
+  prompt.md               -- extraction prompt
+frontend/                -- React + Vite UI
+mission1/                -- assignment 1: the standalone LLM-vs-SLM CV-extraction experiment
+                             this demo grew out of (unrelated codebase, own README)
+```
 
-- Both `gemini-2.5-flash-lite` and `gemini-2.5-pro` return 404 "no longer available to new users".
-- Every model tried above the flash-lite tier returned a **quota limit of 0** on this project's free-tier API key (not just a rate limit) -- confirmed individually for `gemini-2.5-flash`, `gemini-2.5-pro`, `gemini-2.0-flash`, `gemini-3-pro-preview`, `gemini-3.1-pro-preview`, and `gemini-pro-latest`.
+## Origin
 
-The only models that actually respond on this key's free tier are `gemini-flash-lite-latest` and `gemini-flash-latest`, so those are what's currently wired up:
-
-| Role | Model |
-|---|---|
-| SLM-class | `gemini-flash-lite-latest` |
-| LLM-class | `gemini-flash-latest` |
-
-**This means the current comparison is Flash-Lite vs Flash, not Flash-Lite vs Pro.** Both models are in the same family, so the size gap under test is smaller than originally designed -- any accuracy difference observed likely *understates* what a true SLM-vs-LLM gap would look like. This is a limitation to call out explicitly in the write-up, not a result to present as a fair small-vs-large comparison.
-
-To run the intended Pro-scale comparison, billing needs to be enabled on the Google AI Studio project to unlock `gemini-pro-latest` quota, then `MODELS["LLM-class"]` in `cv_extraction.py` swapped back to it.
-
-## Results
-
-5 runs of `python cv_extraction.py`, captured as terminal screenshots:
-
-| Run | SLM-class (Flash-Lite) latency | SLM accuracy | LLM-class (Flash) latency | LLM accuracy |
-|---|---|---|---|---|
-| 1 | 1.51s | 14/15 (93%) | 9.96s | 14/15 (93%) |
-| 2 | 1.40s | 14/15 (93%) | 5.86s | 14/15 (93%) |
-| 3 | 1.63s | 15/15 (100%) | 6.16s | 14/15 (93%) |
-| 4 | 1.34s | 14/15 (93%) | 8.10s | 15/15 (100%) |
-| 5 | 1.54s | 15/15 (100%) | 5.05s | 15/15 (100%) |
-
-Across all 5 runs, Flash-Lite was consistently 3-7x faster (~1.3-1.6s vs ~5-10s) while accuracy was comparable between the two. The one recurring "miss" is both models occasionally transcribing "Operator - Proccessing" verbatim from a typo in the source CV, which the ground truth has corrected to "Processing" -- arguably a ground-truth artifact rather than a genuine extraction error.
-
-<details>
-<summary>Raw terminal output (click to expand)</summary>
-
-**Run 1**
-![Run 1](test_results/1.png)
-
-**Run 2**
-![Run 2](test_results/2.png)
-
-**Run 3**
-![Run 3](test_results/3.png)
-
-**Run 4**
-![Run 4](test_results/4.png)
-
-**Run 5**
-![Run 5](test_results/5.png)
-
-</details>
+This app grew out of [`mission1`](mission1/README.md), a standalone experiment comparing a large vs. small language model on CV extraction. That experiment is otherwise unrelated to this codebase -- nothing here imports from it.
