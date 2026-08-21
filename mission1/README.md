@@ -2,17 +2,20 @@
 
 A small experiment comparing a large language model against a small language model on the same CV-extraction task, measuring **accuracy**, **latency**, and **cost**.
 
+This was the assignment 1 experiment. The [demo app](../README.md) it led into (backend + frontend) lives at the repo root, as a separate, unrelated codebase -- nothing here is imported by it.
+
 Both models are given the identical prompt and CV, and are scored against the same hand-written ground truth. See [`pseudo_code.md`](pseudo_code.md) for the full step-by-step logic walkthrough.
 
 ## Setup
 
 ```bash
+cd mission1
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Copy `.env.example` to `.env` and add a Gemini API key:
+Copy `.env.example` (in the repo root) to `.env` in the repo root and add a Gemini API key:
 
 ```
 GEMINI_API_KEY=your_key_here
@@ -35,44 +38,7 @@ data/
   ground_truth.json     -- the correct extraction, used for scoring
   prompt.md              -- the extraction prompt sent to both models (frozen -- matches recorded results below)
 pseudo_code.md          -- pseudocode walkthrough of the test logic
-backend/                 -- demo app API (FastAPI, Gemini or local Ollama backend)
-  prompt.md               -- demo's own extraction prompt (tuned independently, e.g. full descriptions)
-frontend/                -- demo app UI (React + Vite)
 ```
-
-## Demo app
-
-Upload a CV (PDF/DOCX) and auto-fill its experience section, with a per-role confidence score. The extraction backend is swappable via the `MODEL_BACKEND` env var:
-
-| `MODEL_BACKEND` | Model | Notes |
-|---|---|---|
-| `gemini` (default) | Gemini API | uses the same `GEMINI_API_KEY` as the root eval script |
-| `ollama` | `llama3.2:3b`, local | simulates a company running its own locally-hosted SLM, no cloud key needed |
-
-**Backend**
-```bash
-cd backend
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-uvicorn main:app --reload
-```
-
-To use the local Ollama model instead of Gemini:
-```bash
-ollama pull llama3.2:3b   # once -- requires Ollama installed (https://ollama.com)
-ollama serve              # if it isn't already running in the background
-MODEL_BACKEND=ollama uvicorn main:app --reload
-```
-
-**Frontend** (separate terminal)
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Then open the Vite dev server URL (typically `http://localhost:5173`).
 
 ## Caveats: model size access
 
