@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './App.css'
+import NavBar from './components/NavBar'
 import CvCard from './components/CvCard'
 import ExperienceSection from './components/ExperienceSection'
 
@@ -64,25 +65,28 @@ function App() {
   }
 
   return (
-    <main className="app">
-      <h1>My Profile</h1>
+    <>
+      <NavBar />
+      <main className="app">
+        <h1>My Profile</h1>
 
-      <CvCard
-        cv={cv}
-        status={status}
-        error={error}
-        notice={notice}
-        onUpload={handleUpload}
-        onDelete={handleCvDelete}
-      />
+        <CvCard
+          cv={cv}
+          status={status}
+          error={error}
+          notice={notice}
+          onUpload={handleUpload}
+          onDelete={handleCvDelete}
+        />
 
-      <ExperienceSection
-        experience={experience}
-        onAdd={handleExperienceAdd}
-        onSave={handleExperienceSave}
-        onDelete={handleExperienceDelete}
-      />
-    </main>
+        <ExperienceSection
+          experience={experience}
+          onAdd={handleExperienceAdd}
+          onSave={handleExperienceSave}
+          onDelete={handleExperienceDelete}
+        />
+      </main>
+    </>
   )
 }
 
