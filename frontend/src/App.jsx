@@ -10,10 +10,12 @@ function App() {
   const [experience, setExperience] = useState([])
   const [status, setStatus] = useState('idle') // idle | loading | error
   const [error, setError] = useState(null)
+  const [notice, setNotice] = useState(null) // { type: 'warning' | 'info', message }
 
   async function handleUpload(file) {
     setStatus('loading')
     setError(null)
+    setNotice(null)
 
     const formData = new FormData()
     formData.append('file', file)
@@ -23,11 +25,19 @@ function App() {
       if (!res.ok) throw new Error(`Server returned ${res.status}`)
 
       const data = await res.json()
+      const extracted = data.experience || []
       setCv({ file, name: file.name })
-      setExperience(
-        (data.experience || []).map((role) => ({ id: crypto.randomUUID(), location: '', ...role })),
-      )
+      setExperience(extracted.map((role) => ({ id: crypto.randomUUID(), location: '', ...role })))
       setStatus('idle')
+
+      if (extracted.length === 0) {
+        setNotice({
+          type: 'warning',
+          message: "We couldn't extract experience from this CV automatically — you can add it manually below.",
+        })
+      } else if (data.escalated) {
+        setNotice({ type: 'info', message: 'Used enhanced extraction for this CV.' })
+      }
     } catch (err) {
       setError(err.message)
       setStatus('error')
@@ -38,6 +48,7 @@ function App() {
     setCv(null)
     setStatus('idle')
     setError(null)
+    setNotice(null)
   }
 
   function handleExperienceAdd(role) {
@@ -56,7 +67,14 @@ function App() {
     <main className="app">
       <h1>My Profile</h1>
 
-      <CvCard cv={cv} status={status} error={error} onUpload={handleUpload} onDelete={handleCvDelete} />
+      <CvCard
+        cv={cv}
+        status={status}
+        error={error}
+        notice={notice}
+        onUpload={handleUpload}
+        onDelete={handleCvDelete}
+      />
 
       <ExperienceSection
         experience={experience}

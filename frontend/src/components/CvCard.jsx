@@ -1,6 +1,6 @@
 import { DownloadIcon, TrashIcon } from './icons'
 
-function CvCard({ cv, status, error, onUpload, onDelete }) {
+function CvCard({ cv, status, error, notice, onUpload, onDelete }) {
   const loading = status === 'loading'
 
   function handleFileChange(event) {
@@ -27,6 +27,7 @@ function CvCard({ cv, status, error, onUpload, onDelete }) {
       </p>
 
       {status === 'error' && <p className="error">Couldn't extract that CV: {error}</p>}
+      {notice && <p className={`notice notice--${notice.type}`}>{notice.message}</p>}
 
       {cv ? (
         <div className="cv-row">
