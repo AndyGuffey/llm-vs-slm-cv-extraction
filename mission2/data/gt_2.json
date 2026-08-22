@@ -1,0 +1,37 @@
+[
+  {
+    "title": "Assistant Mead Maker",
+    "company": "Beehave Craft Meadery",
+    "start": "2021-11",
+    "end": "present",
+    "description": "Brewed alcoholic mead, maintained premises including painting, building, and cleaning, provided friendly customer interactions, and often worked in sole charge or managed staff."
+  },
+  {
+    "title": "Farm Assistant",
+    "company": "Rockland Farms",
+    "start": "2020-10",
+    "end": "2021-02",
+    "description": "Assisted with milking, herding, and shearing, and maintained farmland."
+  },
+  {
+    "title": "Childcare Worker",
+    "company": "",
+    "start": "",
+    "end": "",
+    "description": "Provided after-work child minding, built positive relationships with children, assisted with elementary-school homework, transported children to and from school and activities, prepared meals, and engaged children in creative crafts."
+  },
+  {
+    "title": "Gardener",
+    "company": "Carlton Landscapes",
+    "start": "2019-10",
+    "end": "2020-01",
+    "description": "Identified and removed invasive plants and weeds, learnt garden and tool health and safety, and performed general garden maintenance."
+  },
+  {
+    "title": "Waitress",
+    "company": "Cobb & Co",
+    "start": "2016-11",
+    "end": "2017-02",
+    "description": "Ran sections within the restaurant, worked as part of a team to deliver quality service, gained food and health safety skills, and created positive customer experiences."
+  }
+]

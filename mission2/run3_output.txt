@@ -1,0 +1,88 @@
+======================================================================
+CV: 1.AG_CV_simple.pdf
+======================================================================
+
+--- A. Ollama-only (llama3.2:3b) ---
+Latency:            4.96s
+Accuracy:           19/20 fields (95%)
+Avg confidence:     0.96
+Issues:
+  - Scania New Zealand Ltd / start: got '2019-12', expected '2019-05'
+
+--- B. Gemini-only (gemini-flash-lite-latest) ---
+Latency:            2.69s
+Accuracy:           20/20 fields (100%)
+Avg confidence:     1.00
+Issues:             none -- all fields matched
+
+--- C. Hybrid (no escalation needed) ---
+Latency:            4.96s
+Accuracy:           19/20 fields (95%)
+Avg confidence:     0.96
+Escalated:          False
+Issues:
+  - Scania New Zealand Ltd / start: got '2019-12', expected '2019-05'
+======================================================================
+CV: 2.JD_CV2.docx
+======================================================================
+
+--- A. Ollama-only (llama3.2:3b) ---
+Latency:            3.43s
+Accuracy:           21/25 fields (84%)
+Avg confidence:     0.96
+Issues:
+  - Beehave Craft Meadery / end: got 'Current', expected 'present'
+  - Childcare Worker / company: got 'Rockland Farms', expected ''
+  - Childcare Worker / start: got '2020-10', expected ''
+  - Childcare Worker / end: got '2021-02', expected ''
+
+--- B. Gemini-only (gemini-flash-lite-latest) ---
+Latency:            1.78s
+Accuracy:           25/25 fields (100%)
+Avg confidence:     0.96
+Issues:             none -- all fields matched
+
+--- C. Hybrid (no escalation needed) ---
+Latency:            3.43s
+Accuracy:           21/25 fields (84%)
+Avg confidence:     0.96
+Escalated:          False
+Issues:
+  - Beehave Craft Meadery / end: got 'Current', expected 'present'
+  - Childcare Worker / company: got 'Rockland Farms', expected ''
+  - Childcare Worker / start: got '2020-10', expected ''
+  - Childcare Worker / end: got '2021-02', expected ''
+======================================================================
+CV: 3.A_G.pdf
+======================================================================
+
+--- A. Ollama-only (llama3.2:3b) ---
+Latency:            2.93s
+Accuracy:           0/20 fields (0%)
+Avg confidence:     0.00
+Issues:
+  - model did not return a JSON array
+
+--- B. Gemini-only (gemini-flash-lite-latest) ---
+Latency:            2.63s
+Accuracy:           16/20 fields (80%)
+Avg confidence:     0.93
+Issues:
+  - Fonterra Co-operative Group Limited / start: got '2021-05', expected '2022-11'
+  - Fonterra Co-operative Group Limited / end: got '2021-09', expected '2025-03'
+  - Suncorp New Zealand / start: got '2022-11', expected '2021-05'
+  - Suncorp New Zealand / end: got '2025-03', expected '2021-09'
+
+--- C. Hybrid (escalated) ---
+Latency:            5.84s
+Accuracy:           20/20 fields (100%)
+Avg confidence:     1.00
+Escalated:          True (parse_failed)
+Issues:             none -- all fields matched
+
+======================================================================
+Results written to /Users/andyguffey/Desktop/pgdip_m1/mission2/results.json
+Cost note: Ollama is $0 marginal cost (local compute). Gemini is
+billed per token -- cite published gemini-flash-lite-latest /
+gemini-flash-latest pricing against these CVs' token lengths for
+an at-scale cost comparison; both were free-tier for this run.

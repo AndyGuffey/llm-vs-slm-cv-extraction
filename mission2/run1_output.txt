@@ -1,0 +1,80 @@
+======================================================================
+CV: 1.AG_CV_simple.pdf
+======================================================================
+
+--- A. Ollama-only (llama3.2:3b) ---
+Latency:            5.07s
+Accuracy:           20/20 fields (100%)
+Avg confidence:     1.00
+Issues:             none -- all fields matched
+
+--- B. Gemini-only (gemini-flash-lite-latest) ---
+Latency:            2.71s
+Accuracy:           20/20 fields (100%)
+Avg confidence:     1.00
+Issues:             none -- all fields matched
+
+--- C. Hybrid (no escalation needed) ---
+Latency:            5.07s
+Accuracy:           20/20 fields (100%)
+Avg confidence:     1.00
+Escalated:          False
+Issues:             none -- all fields matched
+======================================================================
+CV: 2.JD_CV2.docx
+======================================================================
+
+--- A. Ollama-only (llama3.2:3b) ---
+Latency:            3.26s
+Accuracy:           20/25 fields (80%)
+Avg confidence:     1.00
+Issues:
+  - missing role: Childcare Worker
+
+--- B. Gemini-only (gemini-flash-lite-latest) ---
+Latency:            1.79s
+Accuracy:           25/25 fields (100%)
+Avg confidence:     0.96
+Issues:             none -- all fields matched
+
+--- C. Hybrid (no escalation needed) ---
+Latency:            3.26s
+Accuracy:           20/25 fields (80%)
+Avg confidence:     1.00
+Escalated:          False
+Issues:
+  - missing role: Childcare Worker
+======================================================================
+CV: 3.A_G.pdf
+======================================================================
+
+--- A. Ollama-only (llama3.2:3b) ---
+Latency:            6.24s
+Accuracy:           0/20 fields (0%)
+Avg confidence:     0.00
+Issues:
+  - model did not return a JSON array
+
+--- B. Gemini-only (gemini-flash-lite-latest) ---
+Latency:            3.10s
+Accuracy:           16/20 fields (80%)
+Avg confidence:     0.93
+Issues:
+  - Fonterra Co-operative Group Limited / start: got '2021-05', expected '2022-11'
+  - Fonterra Co-operative Group Limited / end: got '2021-09', expected '2025-03'
+  - Suncorp New Zealand / start: got '2022-11', expected '2021-05'
+  - Suncorp New Zealand / end: got '2025-03', expected '2021-09'
+
+--- C. Hybrid (escalated) ---
+Latency:            8.70s
+Accuracy:           20/20 fields (100%)
+Avg confidence:     1.00
+Escalated:          True (parse_failed)
+Issues:             none -- all fields matched
+
+======================================================================
+Results written to /Users/andyguffey/Desktop/pgdip_m1/mission2/results.json
+Cost note: Ollama is $0 marginal cost (local compute). Gemini is
+billed per token -- cite published gemini-flash-lite-latest /
+gemini-flash-latest pricing against these CVs' token lengths for
+an at-scale cost comparison; both were free-tier for this run.
