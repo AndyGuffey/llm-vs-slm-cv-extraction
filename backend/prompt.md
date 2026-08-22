@@ -7,8 +7,8 @@ Respond with ONLY a JSON array, no markdown fences, no commentary.
 Each entry must have exactly these keys:
 "title" (string, the job title)
 "company" (string, employer name only, no location)
-"start" (string, "YYYY-MM" format)
-"end" (string, "YYYY-MM" format, or "present")
+"start" (string, "YYYY-MM" format, or "" if the CV does not state one -- never guess or invent a date)
+"end" (string, "YYYY-MM" format, "present" for an ongoing role, or "" if the CV does not state one -- never guess or invent a date)
 "description" (string, a concise summary covering ALL responsibilities and
 achievements listed for this role, not just the first one -- combine them
 into a few sentences)

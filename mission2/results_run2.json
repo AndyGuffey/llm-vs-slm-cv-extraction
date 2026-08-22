@@ -1,0 +1,125 @@
+[
+  {
+    "cv": "1.AG_CV_simple.pdf",
+    "paths": [
+      {
+        "label": "A. Ollama-only (llama3.2:3b)",
+        "latency": 3.42,
+        "correct": 20,
+        "total": 20,
+        "accuracy_pct": 100.0,
+        "avg_confidence": 1.0,
+        "escalated": null,
+        "escalation_reason": null,
+        "notes": []
+      },
+      {
+        "label": "B. Gemini-only (gemini-flash-lite-latest)",
+        "latency": 2.37,
+        "correct": 20,
+        "total": 20,
+        "accuracy_pct": 100.0,
+        "avg_confidence": 1.0,
+        "escalated": null,
+        "escalation_reason": null,
+        "notes": []
+      },
+      {
+        "label": "C. Hybrid (no escalation needed)",
+        "latency": 3.42,
+        "correct": 20,
+        "total": 20,
+        "accuracy_pct": 100.0,
+        "avg_confidence": 1.0,
+        "escalated": false,
+        "escalation_reason": null,
+        "notes": []
+      }
+    ]
+  },
+  {
+    "cv": "2.JD_CV2.docx",
+    "paths": [
+      {
+        "label": "A. Ollama-only (llama3.2:3b)",
+        "latency": 3.14,
+        "correct": 0,
+        "total": 25,
+        "accuracy_pct": 0.0,
+        "avg_confidence": 0.0,
+        "escalated": null,
+        "escalation_reason": null,
+        "notes": [
+          "model did not return a JSON array"
+        ]
+      },
+      {
+        "label": "B. Gemini-only (gemini-flash-lite-latest)",
+        "latency": 1.69,
+        "correct": 25,
+        "total": 25,
+        "accuracy_pct": 100.0,
+        "avg_confidence": 0.96,
+        "escalated": null,
+        "escalation_reason": null,
+        "notes": []
+      },
+      {
+        "label": "C. Hybrid (escalated)",
+        "latency": 4.96,
+        "correct": 25,
+        "total": 25,
+        "accuracy_pct": 100.0,
+        "avg_confidence": 0.96,
+        "escalated": true,
+        "escalation_reason": "parse_failed",
+        "notes": []
+      }
+    ]
+  },
+  {
+    "cv": "3.A_G.pdf",
+    "paths": [
+      {
+        "label": "A. Ollama-only (llama3.2:3b)",
+        "latency": 3.25,
+        "correct": 0,
+        "total": 20,
+        "accuracy_pct": 0.0,
+        "avg_confidence": 0.0,
+        "escalated": null,
+        "escalation_reason": null,
+        "notes": [
+          "model did not return a JSON array"
+        ]
+      },
+      {
+        "label": "B. Gemini-only (gemini-flash-lite-latest)",
+        "latency": 2.38,
+        "correct": 16,
+        "total": 20,
+        "accuracy_pct": 80.0,
+        "avg_confidence": 0.93,
+        "escalated": null,
+        "escalation_reason": null,
+        "notes": [
+          "Fonterra Co-operative Group Limited / start: got '2021-05', expected '2022-11'",
+          "Fonterra Co-operative Group Limited / end: got '2021-09', expected '2025-03'",
+          "Suncorp New Zealand / start: got '2022-11', expected '2021-05'",
+          "Suncorp New Zealand / end: got '2025-03', expected '2021-09'"
+        ]
+      },
+      {
+        "label": "C. Hybrid (escalated)",
+        "latency": 5.86,
+        "correct": 20,
+        "total": 20,
+        "accuracy_pct": 100.0,
+        "avg_confidence": 1.0,
+        "escalated": true,
+        "escalation_reason": "parse_failed",
+        "notes": []
+      }
+    ]
+  }
+]

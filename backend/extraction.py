@@ -31,6 +31,8 @@ OLLAMA_MODEL_ID = "llama3.2:3b"
 GEMINI_MODEL_ID = "gemini-flash-lite-latest"
 
 EXPECTED_FIELDS = ("title", "company", "start", "end", "description")
+DATE_FIELDS = ("start", "end")
+NON_DATE_FIELDS = tuple(f for f in EXPECTED_FIELDS if f not in DATE_FIELDS)
 
 # Below this average confidence (or on a parse failure / empty result), escalate
 # from the primary MODEL_BACKEND to Gemini for a second attempt.
@@ -136,11 +138,23 @@ def run_escalation(raw_bytes: bytes, cv_text: str, filename: str):
     return None
 
 
+def _looks_like_date(value: str) -> bool:
+    #? A real YYYY-MM date, "present", or genuinely blank (the CV may not
+    #? state a date -- see prompt.md) all count as valid. Placeholder text
+    #? a model might emit instead of admitting it doesn't know -- "unknown",
+    #? the literal string "YYYY-MM", etc. -- does not.
+    value = value.strip().lower()
+    if value in ("", "present"):
+        return True
+    return len(value) == 7 and value[:4].isdigit() and value[5:7].isdigit()
+
+
 def score_confidence(parsed):
     #? Heuristic per-role confidence, since a local SLM's self-reported
     #? confidence isn't reliable enough to surface in a demo. Each role
-    #? gets a 0-1 score: fraction of expected fields present, plus a
-    #? shape check on start/end looking like real dates.
+    #? gets a 0-1 score: fraction of non-date fields present, plus a shape
+    #? check on start/end (not plain presence -- a hallucinated placeholder
+    #? like "YYYY-MM" is non-empty but should still cost the role marks).
     if not isinstance(parsed, list):
         return []
 
@@ -149,14 +163,8 @@ def score_confidence(parsed):
         if not isinstance(role, dict):
             continue
 
-        checks = [bool(str(role.get(field, "")).strip()) for field in EXPECTED_FIELDS]
-
-        for field in ("start", "end"):
-            value = str(role.get(field, "")).strip().lower()
-            looks_like_date = value == "present" or (
-                len(value) == 7 and value[:4].isdigit() and value[5:7].isdigit()
-            )
-            checks.append(looks_like_date)
+        checks = [bool(str(role.get(field, "")).strip()) for field in NON_DATE_FIELDS]
+        checks += [_looks_like_date(str(role.get(field, ""))) for field in DATE_FIELDS]
 
         confidence = round(sum(checks) / len(checks), 2)
         results.append({**role, "confidence": confidence})
